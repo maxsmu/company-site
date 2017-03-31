@@ -42,6 +42,24 @@ align-text@^0.1.1, align-text@^0.1.3:
     longest "^1.0.1"
     repeat-string "^1.5.2"
 
+angular-animate@^1.6.3:
+  version "1.6.3"
+  resolved "http://registry.npm.taobao.org/angular-animate/download/angular-animate-1.6.3.tgz#d228a14f47a4e50bea44ed15bbc4651d44d194f5"
+
+angular-resource@^1.6.3:
+  version "1.6.3"
+  resolved "http://registry.npm.taobao.org/angular-resource/download/angular-resource-1.6.3.tgz#a6fb59409281e3ce5e23db3e545f0b9aff705e55"
+
+angular-ui-router@^0.4.2:
+  version "0.4.2"
+  resolved "http://registry.npm.taobao.org/angular-ui-router/download/angular-ui-router-0.4.2.tgz#b6aed1ca69a683c82e3992898eabd4ba15868608"
+  dependencies:
+    angular "^1.0.8"
+
+angular@^1.0.8, angular@^1.6.3:
+  version "1.6.3"
+  resolved "http://registry.npm.taobao.org/angular/download/angular-1.6.3.tgz#5d34b799234e8fa17c6a3a14e0258733935f43e7"
+
 ansi-regex@^2.0.0:
   version "2.1.1"
   resolved "http://registry.npm.taobao.org/ansi-regex/download/ansi-regex-2.1.1.tgz#c3b33ab5ee360d86e0e628f0468ae7ef27d654df"
@@ -1411,6 +1429,10 @@ normalize-package-data@^2.3.2:
 normalize-path@^2.0.1:
   version "2.0.1"
   resolved "http://registry.npm.taobao.org/normalize-path/download/normalize-path-2.0.1.tgz#47886ac1662760d4261b7d979d241709d3ce3f7a"
+
+normalize.css@^6.0.0:
+  version "6.0.0"
+  resolved "http://registry.npm.taobao.org/normalize.css/download/normalize.css-6.0.0.tgz#22188c2707c911fb3ad3c1aac0677ff68661bea8"
 
 npmlog@^4.0.2:
   version "4.0.2"
