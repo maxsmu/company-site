@@ -2,7 +2,7 @@
  * @Author: Micheal
  * @Date: 2017-03-21 22:36:22
  * @Last Modified by: Micheal
- * @Last Modified time: 2017-03-27 14:35:22
+ * @Last Modified time: 2017-04-05 21:05:48
  * @GitHub: https://github.com/maxsmu
 */
 const express = require('express')
@@ -64,4 +64,4 @@ app.use(function(err, req, res, next) {
   res.send(err.message)
 })
 
-app.listen(2333, () => console.log(`系统在端口2333成功启动`))
+app.listen(3333, () => console.log(`系统在端口3333成功启动`))

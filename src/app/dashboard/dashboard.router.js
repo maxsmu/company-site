@@ -1,3 +1,10 @@
+/**
+ * @Author: Micheal
+ * @Date: 2017-03-31 18:00:54
+ * @Last Modified by: Micheal
+ * @Last Modified time: 2017-03-31 18:00:54
+ * @GitHub: https://github.com/maxsmu
+*/
 import './dashboard.scss';
 import template from './dashboard.tpl.html';
 import dashboardController from './dashboard.controller';

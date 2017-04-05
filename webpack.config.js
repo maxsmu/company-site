@@ -2,7 +2,7 @@
  * @Author: Micheal
  * @Date: 2017-03-27 14:13:13
  * @Last Modified by: Micheal
- * @Last Modified time: 2017-03-27 22:58:33
+ * @Last Modified time: 2017-04-05 23:09:08
  * @GitHub: https://github.com/maxsmu
 */
 // webpack
@@ -30,6 +30,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // autoprefixer
 const autoprefixer = require('autoprefixer');
+
+// precss
+const precss = require('precss');
 
 // 获取运行环境
 const NODE_ENV = process.env.NODE_ENV;
@@ -91,68 +94,75 @@ const webpackBaseConfig = {
       filename: './build/index.html',
       inject: false
     }),
-    new ExtractTextPlugin('[name].css'),
+    new webpack.LoaderOptionsPlugin({
+      // test: /\.css$/,
+      options: {
+        postcss: () => [precss, autoprefixer]
+      }
+    }),
+    new ExtractTextPlugin({ filename: '[name].css' }),
     // dev
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
+    // new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
     new webpack.NoErrorsPlugin()
   ],
   module: {
-    preLoaders: [
+    rules: [
       {
         test: /\.js$/,
         loader: 'eslint-loader',
+        enforce: "pre",
         exclude: /node_modules/,
         include: [path.join(__dirname, 'src')]
-      }
-    ],
-    loaders: [
+      },
       {
         test: /\.js$/,
-        loaders: ['babel'],
+        use: ['babel-loader'],
         exclude: /(node_modules|bower_components)/
       },
       {
         test: /\.tpl\.html$/,
-        loader: 'html',
+        use: ['html-loader'],
         query: { interpolate: true },
         exclude: /(node_modules|bower_components)/,
         include: path.join(__dirname, 'src')
-      },
-      {
+      }, {
         test: /\.url\.html$/,
-        loader: 'file?name=[path][name]-[hash:8].[ext]',
+        use: ['file-loader?name=[path][name]-[hash:8].[ext]'],
         exclude: /(node_modules|bower_components)/,
         include: path.join(__dirname, 'src')
       },
       {
         test: /\.(sc|c)ss$/,
-        loader: ExtractTextPlugin.extract('style', 'css?-minimize!postcss!resolve-url!sass?sourceMap'),
+        loader: ExtractTextPlugin.extract({
+          fallbackLoader: 'style-loader',
+          loader: 'css-loader'
+        }),
         exclude: /(node_modules|bower_components)/
       },
       {
         test: /\.(jpe?g|png|gif)$/i,
-        loaders: [
-          'file?hash=sha512&digest=hex&name=[hash:8].[ext]',
-          'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+        use: [
+          'file-loader?hash=sha512&digest=hex&name=[hash:8].[ext]',
+          'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
         ]
       },
       {
         test: /\.(woff|woff2)(\?t=\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/font-woff&prefix=fonts'
+        use: ['url-loader?limit=10000&mimetype=application/font-woff&prefix=fonts']
       },
       {
         test: /\.ttf(\?t=\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/octet-stream&prefix=fonts'
+        use: ['url-loader?limit=10000&mimetype=application/octet-stream&prefix=fonts']
       },
       {
         test: /\.eot(\?t=\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/vnd.ms-fontobject&prefix=fonts'
+        use: ['url-loader?limit=10000&mimetype=application/vnd.ms-fontobject&prefix=fonts']
       },
       {
         test: /\.svg(\?t=\d+)?$/,
-        loader: 'url?limit=10000&mimetype=image/svg+xml&prefix=fonts'
+        use: ['url-loader?limit=10000&mimetype=image/svg+xml&prefix=fonts']
       }
     ]
   }
@@ -211,6 +221,14 @@ if (NODE_ENV === 'production') {
         template: './index.html',
         filename: './index.html',
         inject: false
+      }),
+      new webpack.LoaderOptionsPlugin({
+        test: /\.css$/,
+        options: {
+          postcss: function() {
+            return [precss, autoprefixer];
+          }
+        }
       }),
       new ExtractTextPlugin('[name]-[contenthash:8].css'),
 
