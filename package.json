@@ -2,7 +2,7 @@
   "name": "company",
   "version": "0.0.1",
   "scripts": {
-    "start": "webpack --config webpack.config.js & node app.js "
+    "start": "webpack --config  webpack/webpack.dev.config.js & node app.js "
   },
   "dependencies": {
     "angular": "^1.6.3",

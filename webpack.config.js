@@ -2,7 +2,7 @@
  * @Author: Micheal
  * @Date: 2017-03-27 14:13:13
  * @Last Modified by: Micheal
- * @Last Modified time: 2017-04-05 23:09:08
+ * @Last Modified time: 2017-04-10 23:41:23
  * @GitHub: https://github.com/maxsmu
 */
 // webpack
@@ -62,22 +62,34 @@ const webpackBaseConfig = {
   output: {
     path: path.join(__dirname, 'build'),
     filename: '[name].js',
-    publicPath: '/' // hot loader publish dir
+    publicPath: '/'
   },
   devServer: {
     hot: true
   },
   resolve: {
-    extensions: ['', '.js', '.scss']
+    extensions: ['.js', '.scss']
   },
-  eslint: {
-    configFile: '.eslintrc',
-    emitWarning: true,
-    emitError: true,
-    formatter: eslintFriendlyFormatter
-  },
-  postcss: [autoprefixer({ browsers: ['Chrome > 35', 'Firefox > 30', 'Safari > 7'] })],
   plugins: [
+    new webpack.LoaderOptionsPlugin({
+      test: /\.js$/,
+      options: {
+        eslint: {
+          configFile: path.join(__dirname, '.eslintrc'),
+          emitWarning: true,
+          emitError: true,
+          formatter: eslintFriendlyFormatter
+        },
+        context: path.join(__dirname, 'src')
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      test: /\.css$/,
+      options: {
+        context: path.join(__dirname, 'src'),
+        postcss: () => [precss, autoprefixer({ browsers: ['Chrome > 35', 'Firefox > 30', 'Safari > 7'] })]
+      }
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(systemEnv)
@@ -94,16 +106,9 @@ const webpackBaseConfig = {
       filename: './build/index.html',
       inject: false
     }),
-    new webpack.LoaderOptionsPlugin({
-      // test: /\.css$/,
-      options: {
-        postcss: () => [precss, autoprefixer]
-      }
-    }),
     new ExtractTextPlugin({ filename: '[name].css' }),
     // dev
     new webpack.HotModuleReplacementPlugin(),
-    // new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
     new webpack.NoErrorsPlugin()
   ],
@@ -111,14 +116,18 @@ const webpackBaseConfig = {
     rules: [
       {
         test: /\.js$/,
-        loader: 'eslint-loader',
+        use: [{ loader: 'eslint-loader' }],
         enforce: "pre",
         exclude: /node_modules/,
         include: [path.join(__dirname, 'src')]
       },
       {
         test: /\.js$/,
-        use: ['babel-loader'],
+        use: [{
+          loader: 'babel-loader'
+          // ,
+          // options: { presets: [['es2015', { modules: false }]] }
+        }],
         exclude: /(node_modules|bower_components)/
       },
       {
@@ -135,9 +144,9 @@ const webpackBaseConfig = {
       },
       {
         test: /\.(sc|c)ss$/,
-        loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style-loader',
-          loader: 'css-loader'
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader'
         }),
         exclude: /(node_modules|bower_components)/
       },
@@ -226,7 +235,7 @@ if (NODE_ENV === 'production') {
         test: /\.css$/,
         options: {
           postcss: function() {
-            return [precss, autoprefixer];
+            return [precss, autoprefixer({ browsers: ['Chrome > 35', 'Firefox > 30', 'Safari > 7'] })];
           }
         }
       }),
