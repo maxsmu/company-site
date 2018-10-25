@@ -1,4 +1,6 @@
 # company-site
+
+``` 
 this is site
 ├── app.js //程序入口
 ├── config //配置目录
@@ -12,3 +14,4 @@ this is site
 ├── service //第三方服务
 ├── test // 测试
 └── utils //工具
+```
